@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPSI LOC - Location de Matériel Informatique</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        nav {
+            background-color: var(--secondary-color);
+            padding: 0.5rem;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+        }
+        
+        nav ul li {
+            margin: 0 1rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            background-color: var(--primary-color);
+            border-radius: 3px;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+            text-align: center;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        /* Page de Login/Register */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .auth-card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .auth-card h2 {
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .auth-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .auth-button:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Page de Catalogue */
+        .filter-bar {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .catalog {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .equipment-card {
+            background-color: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .equipment-image {
+            height: 200px;
+            background-color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .equipment-info {
+            padding: 1.5rem;
+        }
+        
+        .equipment-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .equipment-info p {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .available {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .unavailable {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .equipment-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .rent-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .rent-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .rent-button.disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        /* Page Admin */
+        .admin-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .admin-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .admin-button.danger {
+            background-color: var(--accent-color);
+        }
+        
+        .admin-button.danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .equipment-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .equipment-table th,
+        .equipment-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .equipment-table th {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .equipment-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .equipment-table tr:hover td {
+            background-color: #f5f5f5;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Page de Contact/Réclamation */
+        .contact-card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 150px;
+        }
+        
+        .contact-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+        }
+        
+        .contact-submit:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Utilitaires */
+        .tab-container {
+            margin-bottom: 2rem;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tab {
+            padding: 0.5rem 1rem;
+            background-color: var(--light-color);
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .tab-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0 5px 5px 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            margin-top: auto;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 0.3rem 0;
+            }
+            
+            .logo-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .equipment-table {
+                font-size: 0.9rem;
+            }
+            
+            .equipment-table th,
+            .equipment-table td {
+                padding: 0.7rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo">EPSI LOC</div>
+        </div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#" id="login-link">Login / Register</a></li>
+            <li><a href="#" id="catalog-link">Catalogue</a></li>
+            <li><a href="#" id="admin-link">Administration</a></li>
+            <li><a href="#" id="contact-link">Contact / Réclamation</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <!-- Page de Login/Register -->
+        <section id="login-page">
+            <h1 class="section-title">Accès au Système</h1>
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2>Connexion</h2>
+                    <form class="auth-form" id="login-form">
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Mot de passe</label>
+                            <input type="password" id="login-password" name="password" required>
+                        </div>
+                        <div id="login-error" class="error-message"></div>
+                        <button type="submit" class="auth-button">Se connecter</button>
+                    </form>
+                </div>
+                
+                <div class="auth-card">
+                    <h2>Inscription</h2>
+                    <form class="auth-form" id="register-form">
+                        <div class="form-group">
+                            <label for="register-name">Nom complet</label>
+                            <input type="text" id="register-name" name="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Email</label>
+                            <input type="email" id="register-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Mot de passe</label>
+                            <input type="password" id="register-password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password-confirm">Confirmer le mot de passe</label>
+                            <input type="password" id="register-password-confirm" name="passwordConfirm" required>
+                        </div>
+                        <div id="register-error" class="error-message"></div>
+                        <button type="submit" class="auth-button">S'inscrire</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Page de Catalogue -->
+        <section id="catalog-page" class="hidden">
+            <h1 class="section-title">Catalogue de Matériel</h1>
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <select id="category-filter">
+                        <option value="">Toutes les catégories</option>
+                        <option value="ordinateurs">Ordinateurs</option>
+                        <option value="serveurs">Serveurs</option>
+                        <option value="reseaux">Équipements réseaux</option>
+                        <option value="peripheriques">Périphériques</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="availability-filter">
+                        <option value="">Tous les statuts</option>
+                        <option value="available">Disponible</option>
+                        <option value="unavailable">En location</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="catalog">
+                <div class="equipment-card">
+                    <div class="equipment-image">
+                        <img src="/api/placeholder/280/200" alt="Ordinateur portable">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>Ordinateur Portable Pro</h3>
+                        <p>Intel Core i7, 16 Go RAM, 512 Go SSD</p>
+                        <p>Référence: ORD-001</p>
+                        <div class="status available">Disponible</div>
+                        <div class="equipment-actions">
+                            <span class="price">35€ / jour</span>
+                            <button class="rent-button">Réserver</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="equipment-card">
+                    <div class="equipment-image">
+                        <img src="/api/placeholder/280/200" alt="Serveur">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>Serveur Rack 2U</h3>
+                        <p>Intel Xeon, 64 Go RAM, 4x 2TB SSD</p>
+                        <p>Référence: SRV-002</p>
+                        <div class="status unavailable">En location</div>
+                        <div class="equipment-actions">
+                            <span class="price">120€ / jour</span>
+                            <button class="rent-button disabled">Indisponible</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="equipment-card">
+                    <div class="equipment-image">
+                        <img src="/api/placeholder/280/200" alt="Switch réseau">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>Switch Réseau Manageable</h3>
+                        <p>24 ports Gigabit, 4 ports SFP+, POE+</p>
+                        <p>Référence: NET-003</p>
+                        <div class="status available">Disponible</div>
+                        <div class="equipment-actions">
+                            <span class="price">25€ / jour</span>
+                            <button class="rent-button">Réserver</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="equipment-card">
+                    <div class="equipment-image">
+                        <img src="/api/placeholder/280/200" alt="Station de travail">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>Station de Travail</h3>
+                        <p>AMD Ryzen 9, 32 Go RAM, RTX 3080</p>
+                        <p>Référence: STA-004</p>
+                        <div class="status available">Disponible</div>
+                        <div class="equipment-actions">
+                            <span class="price">45€ / jour</span>
+                            <button class="rent-button">Réserver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Page Admin -->
+        <section id="admin-page" class="hidden">
+            <h1 class="section-title">Gestion du Matériel</h1>
+            
+            <div class="tab-container">
+                <div class="tabs">
+                    <div class="tab active" data-tab="equipment-list">Liste du matériel</div>
+                    <div class="tab" data-tab="add-equipment">Ajouter du matériel</div>
+                </div>
+                
+                <div class="tab-content" id="equipment-list">
+                    <div class="admin-controls">
+                        <button class="admin-button">Exporter la liste</button>
+                        <button class="admin-button danger">Supprimer la sélection</button>
+                    </div>
+                    
+                    <table class="equipment-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox"></th>
+                                <th>Référence</th>
+                                <th>Nom</th>
+                                <th>Catégorie</th>
+                                <th>Statut</th>
+                                <th>Prix/jour</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>ORD-001</td>
+                                <td>Ordinateur Portable Pro</td>
+                                <td>Ordinateurs</td>
+                                <td>Disponible</td>
+                                <td>35€</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="admin-button">Modifier</button>
+                                        <button class="admin-button danger">Supprimer</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>SRV-002</td>
+                                <td>Serveur Rack 2U</td>
+                                <td>Serveurs</td>
+                                <td>En location</td>
+                                <td>120€</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="admin-button">Modifier</button>
+                                        <button class="admin-button danger">Supprimer</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>NET-003</td>
+                                <td>Switch Réseau Manageable</td>
+                                <td>Réseaux</td>
+                                <td>Disponible</td>
+                                <td>25€</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="admin-button">Modifier</button>
+                                        <button class="admin-button danger">Supprimer</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>STA-004</td>
+                                <td>Station de Travail</td>
+                                <td>Ordinateurs</td>
+                                <td>Disponible</td>
+                                <td>45€</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="admin-button">Modifier</button>
+                                        <button class="admin-button danger">Supprimer</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="tab-content hidden" id="add-equipment">
+                    <form class="auth-form">
+                        <div class="form-group">
+                            <label for="equipment-reference">Référence</label>
+                            <input type="text" id="equipment-reference" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="equipment-name">Nom du matériel</label>
+                            <input type="text" id="equipment-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="equipment-category">Catégorie</label>
+                            <select id="equipment-category" required>
+                                <option value="">Sélectionner une catégorie</option>
+                                <option value="ordinateurs">Ordinateurs</option>
+                                <option value="serveurs">Serveurs</option>
+                                <option value="reseaux">Équipements réseaux</option>
+                                <option value="peripheriques">Périphériques</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="equipment-description">Description</label>
+                            <textarea id="equipment-description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="equipment-price">Prix journalier (€)</label>
+                            <input type="number" id="equipment-price" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="equipment-image">Image</label>
+                            <input type="file" id="equipment-image">
+                        </div>
+                        <button type="submit" class="auth-button">Ajouter le matériel</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Page de Contact/Réclamation -->
+        <section id="contact-page" class="hidden">
+            <h1 class="section-title">Contact / Réclamation</h1>
+            
+            <div class="contact-card">
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="contact-name">Nom complet</label>
+                        <input type="text" id="contact-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email">Email</label>
+                        <input type="email" id="contact-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-subject">Sujet</label>
+                        <select id="contact-subject" required>
+                            <option value="">Sélectionner un sujet</option>
+                            <option value="reclamation">Réclamation</option>
+                            <option value="probleme">Problème technique</option>
+                            <option value="question">Question générale</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-message">Message</label>
+                        <textarea id="contact-message" required></textarea>
+                    </div>
+                    <button type="submit" class="contact-submit">Envoyer</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 EPSI LOC - Tous droits réservés</p>
+    </footer>
+    
+    <script>
+        // Navigation simple entre les pages
+
+// Fonction pour charger la liste du matériel dans le tableau admin
+function loadEquipmentTable() {
+    fetch('get_equipment.php')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.querySelector('.equipment-table tbody');
+            tableBody.innerHTML = '';
+            
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="checkbox" value="${item.id}"></td>
+                    <td>${item.reference}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category}</td>
+                    <td>${item.status === 'available' ? 'Disponible' : 'En location'}</td>
+                    <td>${item.price_per_day}€</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="admin-button edit-btn" data-id="${item.id}">Modifier</button>
+                            <button class="admin-button danger delete-btn" data-id="${item.id}">Supprimer</button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Ajouter les gestionnaires d'événements pour les boutons d'édition et de suppression
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const equipmentId = this.getAttribute('data-id');
+                    editEquipment(equipmentId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const equipmentId = this.getAttribute('data-id');
+                    if (confirm('Êtes-vous sûr de vouloir supprimer cet équipement?')) {
+                        deleteEquipment(equipmentId);
+                    }
+                });
+            });
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Charger le tableau quand on clique sur l'onglet "Liste du matériel"
+document.querySelector('.tab[data-tab="equipment-list"]').addEventListener('click', loadEquipmentTable);
+
+// Charger également le tableau quand on accède à la page admin
+document.getElementById('admin-link').addEventListener('click', function() {
+    setTimeout(loadEquipmentTable, 100); // Léger délai pour s'assurer que le DOM est prêt
+});
+
+// Soumettre le formulaire d'ajout d'équipement
+const addEquipmentForm = document.querySelector('#add-equipment form');
+if (addEquipmentForm) {
+    addEquipmentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        fetch('add_equipment.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                this.reset();
+                // Afficher l'onglet de liste et recharger les données
+                document.querySelector('.tab[data-tab="equipment-list"]').click();
+            } else {
+                alert('Erreur: ' + data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+}
+
+// Fonctions pour éditer et supprimer
+function editEquipment(id) {
+    // Rediriger vers un formulaire d'édition ou ouvrir un modal
+    // À implémenter selon vos besoins
+    alert('Fonction d\'édition à implémenter pour l\'ID: ' + id);
+}
+
+function deleteEquipment(id) {
+    fetch('delete_equipment.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `id=${id}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Équipement supprimé avec succès');
+            loadEquipmentTable();
+        } else {
+            alert('Erreur: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+        // Fonction pour charger et afficher le matériel
+function loadEquipment(category = '', availability = '') {
+    fetch(`get_equipment.php?category=${category}&availability=${availability}`)
+        .then(response => response.json())
+        .then(data => {
+            const catalogContainer = document.querySelector('.catalog');
+            catalogContainer.innerHTML = '';
+            
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'equipment-card';
+                
+                // Image
+                const imagePath = item.image_path ? item.image_path : '/api/placeholder/280/200';
+                
+                card.innerHTML = `
+                    <div class="equipment-image">
+                        <img src="${imagePath}" alt="${item.name}">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                        <p>Référence: ${item.reference}</p>
+                        <div class="status ${item.status === 'available' ? 'available' : 'unavailable'}">
+                            ${item.status === 'available' ? 'Disponible' : 'En location'}
+                        </div>
+                        <div class="equipment-actions">
+                            <button class="rent-button ${item.status === 'available' ? '' : 'disabled'}">
+                                ${item.status === 'available' ? 'Réserver' : 'Indisponible'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Ajouter la fonction de réservation au bouton si disponible
+                if (item.status === 'available') {
+                    const rentButton = card.querySelector('.rent-button');
+                    rentButton.addEventListener('click', function() {
+                        // Rediriger vers la page de réservation ou ouvrir un modal
+                        if (isUserLoggedIn()) {
+                            rentEquipment(item.id);
+                        } else {
+                            alert('Veuillez vous connecter pour réserver du matériel');
+                            document.getElementById('login-link').click();
+                        }
+                    });
+                }
+                
+                catalogContainer.appendChild(card);
+            });
+            
+            // Si aucun équipement n'est trouvé
+            if (data.length === 0) {
+                catalogContainer.innerHTML = '<p class="no-results">Aucun équipement trouvé avec ces critères</p>';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Charger la liste d'équipements au chargement de la page catalogue
+document.getElementById('catalog-link').addEventListener('click', function() {
+    loadEquipment();
+});
+
+// Filtres pour le catalogue
+const categoryFilter = document.getElementById('category-filter');
+const availabilityFilter = document.getElementById('availability-filter');
+
+if (categoryFilter && availabilityFilter) {
+    categoryFilter.addEventListener('change', applyFilters);
+    availabilityFilter.addEventListener('change', applyFilters);
+}
+
+function applyFilters() {
+    const category = categoryFilter.value;
+    const availability = availabilityFilter.value;
+    loadEquipment(category, availability);
+}
+
+// Fonction pour vérifier si l'utilisateur est connecté
+function isUserLoggedIn() {
+    // Cette fonction devrait vérifier la session côté client
+    // Pour l'instant, une approche simple:
+    return sessionStorage.getItem('user_id') !== null;
+}
+
+// Fonction pour réserver un équipement
+function rentEquipment(equipmentId) {
+    // Ouvrir un modal ou rediriger vers une page de réservation
+    // Ici, on pourrait implémenter un modal simple pour sélectionner les dates
+    alert('Fonctionnalité de réservation à implémenter');
+    
+    // Exemple d'implémentation à développer:
+    /*
+    const startDate = prompt('Date de début (YYYY-MM-DD):', '2025-03-01');
+    const endDate = prompt('Date de fin (YYYY-MM-DD):', '2025-03-05');
+    
+    if (startDate && endDate) {
+        const formData = new FormData();
+        formData.append('equipment_id', equipmentId);
+        formData.append('start_date', startDate);
+        formData.append('end_date', endDate);
+        
+        fetch('rent_equipment.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Réservation effectuée avec succès!');
+                loadEquipment(); // Recharger la liste pour mettre à jour les disponibilités
+            } else {
+                alert('Erreur: ' + data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    */
+}
+
+        // Ajouter ce code à votre script.js ou dans une balise script
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion du formulaire de connexion
+    const loginForm = document.getElementById('login-form');
+    const loginError = document.getElementById('login-error');
+    
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirection en fonction du rôle
+                    if (data.role === 'admin') {
+                        window.location.href = '#admin-page';
+                        document.getElementById('admin-link').click();
+                    } else {
+                        window.location.href = '#catalog-page';
+                        document.getElementById('catalog-link').click();
+                    }
+                } else {
+                    loginError.textContent = data.message;
+                }
+            })
+            .catch(error => {
+                loginError.textContent = 'Erreur de connexion au serveur';
+                console.error('Error:', error);
+            });
+        });
+    }
+    
+    // Gestion du formulaire d'inscription
+    const registerForm = document.getElementById('register-form');
+    const registerError = document.getElementById('register-error');
+    
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('register.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    this.reset();
+                    // Afficher l'onglet de connexion
+                    document.getElementById('login-link').click();
+                } else {
+                    registerError.textContent = data.message;
+                }
+            })
+            .catch(error => {
+                registerError.textContent = 'Erreur de connexion au serveur';
+                console.error('Error:', error);
+            });
+        });
+    }
+});
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginLink = document.getElementById('login-link');
+            const catalogLink = document.getElementById('catalog-link');
+            const adminLink = document.getElementById('admin-link');
+            const contactLink = document.getElementById('contact-link');
+            
+            const loginPage = document.getElementById('login-page');
+            const catalogPage = document.getElementById('catalog-page');
+            const adminPage = document.getElementById('admin-page');
+            const contactPage = document.getElementById('contact-page');
+            
+            loginLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                hideAllPages();
+                loginPage.classList.remove('hidden');
+            });
+            
+            catalogLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                hideAllPages();
+                catalogPage.classList.remove('hidden');
+            });
+            
+            adminLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                hideAllPages();
+                adminPage.classList.remove('hidden');
+            });
+            
+            contactLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                hideAllPages();
+                contactPage.classList.remove('hidden');
+            });
+            
+            function hideAllPages() {
+                loginPage.classList.add('hidden');
+                catalogPage.classList.add('hidden');
+                adminPage.classList.add('hidden');
+                contactPage.classList.add('hidden');
+            }
+            
+            // Fonctionnalité des onglets dans la page admin
+            const tabs = document.querySelectorAll('.tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Enlever la classe active de tous les onglets
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Ajouter la classe active à l'onglet cliqué
+                    this.classList.add('active');
+                    
+                    // Cacher tous les contenus d'onglets
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Afficher le contenu de l'onglet sélectionné
+                    document.getElementById(tabId).classList.remove('hidden');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
