@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPSI LOC - Catalogue</title>
+    <link href="./css/style.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo">EPSI LOC</div>
+        </div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="catalogue.html" class="active">Catalogue!!!</a></li>
+            <li><a href="admin.html">Administration</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li class="auth-status">
+                <a href="login.html" id="login-link">Login / Register</a>
+                <span id="user-status" class="hidden">
+                    <span id="user-name"></span>
+                    <span class="status-indicator connected" title="Connecté"></span>
+                    <a href="#" id="logout-link">Déconnexion</a>
+                </span>
+            </li>
+        </ul>
+    </nav>
+    
+    <main>
+        <section id="catalog-page">
+            <h1 class="section-title">Cacatalogue de Matériel</h1>
+            
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <select id="category-filter">
+                        <option value="">Toutes les catégories</option>
+                        <option value="ordinateurs">Ordinateurs</option>
+                        <option value="serveurs">Serveurs</option>
+                        <option value="reseaux">Équipements réseaux</option>
+                        <option value="peripheriques">Périphériques</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="availability-filter">
+                        <option value="">Tous les statuts</option>
+                        <option value="available">Disponible</option>
+                        <option value="unavailable">En location</option>
+                    </select>
+                </div>
+                <button id="apply-filters">Filtrer</button>
+            </div>
+            
+            <div class="catalog">
+                <!-- Le contenu du catalogue sera inséré dynamiquement ici -->
+            </div>
+            
+            <div class="pagination">
+                <button class="pagination-button" disabled>&laquo; Précédent</button>
+                <span class="pagination-info">Page 1 sur 1</span>
+                <button class="pagination-button" disabled>Suivant &raquo;</button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>EPSI LOC</h3>
+                <p>Location de matériel informatique professionnel</p>
+                <p>Adresse: 123 Avenue de l'Innovation, 75000 Paris</p>
+                <p>Téléphone: 01 23 45 67 89</p>
+                <p>Email: contact@epsiloc.fr</p>
+            </div>
+            <div class="footer-links">
+                <h3>Liens Utiles</h3>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="catalogue.html">Catalogue</a></li>
+                    <li><a href="support.html">Support</a></li>
+                    <li><a href="#">Conditions Générales</a></li>
+                    <li><a href="#">Politique de Confidentialité</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EPSI LOC - Tous droits réservés</p>
+        </div>
+    </footer>
+    
+    <script src="./js/auth.js"></script>
+    <script src="./js/common.js"></script>
+    <script src="./js/catalogue.js"></script>
+</body>
+</html>

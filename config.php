@@ -1,7 +1,7 @@
 <?php
-$host = 'localhost';
+$host = '88.198.97.253';
 $dbname = 'epsiloc';
-$username = 'root';
+$username = 'admin';
 $password = 'root';
 
 try {

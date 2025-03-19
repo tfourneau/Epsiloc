@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPSI LOC - Administration</title>
+    <link href="./css/style.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo">EPSI LOC</div>
+        </div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="admin.html" class="active">Administration</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li class="auth-status">
+                <a href="login.html" id="login-link">Login / Register</a>
+                <span id="user-status" class="hidden">
+                    <span id="user-name"></span>
+                    <span class="status-indicator connected" title="Connecté"></span>
+                    <a href="#" id="logout-link">Déconnexion</a>
+                </span>
+            </li>
+        </ul>
+    </nav>
+    
+    <main>
+        <section id="admin-page">
+            <h1 class="section-title">Gestion du Matériel</h1>
+            
+            <div class="access-denied hidden" id="access-denied">
+                <div class="access-denied-content">
+                    <h2>Accès Refusé</h2>
+                    <p>Vous devez être connecté en tant qu'administrateur pour accéder à cette page.</p>
+                    <a href="login.html" class="auth-button">Se connecter</a>
+                </div>
+            </div>
+            
+            <div class="admin-content" id="admin-content">
+                <div class="tab-container">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="equipment-list">Liste du matériel</div>
+                        <div class="tab" data-tab="add-equipment">Ajouter du matériel</div>
+                        <div class="tab" data-tab="user-management">Gestion utilisateurs</div>
+                    </div>
+                    
+                    <div class="tab-content" id="equipment-list">
+                        <div class="admin-controls">
+                            <button class="admin-button">Exporter la liste</button>
+                            <button class="admin-button danger">Supprimer la sélection</button>
+                        </div>
+                        
+                        <table class="equipment-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="select-all"></th>
+                                    <th>Référence</th>
+                                    <th>Nom</th>
+                                    <th>Catégorie</th>
+                                    <th>Statut</th>
+                                    <th>Prix/jour</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="equipment-table-body">
+                                <!-- Les données du tableau seront insérées dynamiquement ici -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="tab-content hidden" id="add-equipment">
+                        <form class="auth-form" id="add-equipment-form">
+                            <div class="form-group">
+                                <label for="equipment-reference">Référence</label>
+                                <input type="text" id="equipment-reference" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="equipment-name">Nom du matériel</label>
+                                <input type="text" id="equipment-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="equipment-category">Catégorie</label>
+                                <select id="equipment-category" required>
+                                    <option value="">Sélectionner une catégorie</option>
+                                    <option value="ordinateurs">Ordinateurs</option>
+                                    <option value="serveurs">Serveurs</option>
+                                    <option value="reseaux">Équipements réseaux</option>
+                                    <option value="peripheriques">Périphériques</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="equipment-description">Description</label>
+                                <textarea id="equipment-description" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="equipment-price">Prix journalier (€)</label>
+                                <input type="number" id="equipment-price" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="equipment-image">Image</label>
+                                <input type="file" id="equipment-image">
+                            </div>
+                            <button type="submit" class="auth-button">Ajouter le matériel</button>
+                        </form>
+                    </div>
+                    
+                    <div class="tab-content hidden" id="user-management">
+                        <div class="admin-controls">
+                            <button class="admin-button">Exporter les utilisateurs</button>
+                        </div>
+                        
+                        <table class="user-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Rôle</th>
+                                    <th>Statut</th>
+                                    <th>Date d'inscription</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-table-body">
+                                <!-- Les données du tableau seront insérées dynamiquement ici -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>EPSI LOC</h3>
+                <p>Location de matériel informatique professionnel</p>
+                <p>Adresse: 123 Avenue de l'Innovation, 75000 Paris</p>
+                <p>Téléphone: 01 23 45 67 89</p>
+                <p>Email: contact@epsiloc.fr</p>
+            </div>
+            <div class="footer-links">
+                <h3>Liens Utiles</h3>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="catalogue.html">Catalogue</a></li>
+                    <li><a href="support.html">Support</a></li>
+                    <li><a href="#">Conditions Générales</a></li>
+                    <li><a href="#">Politique de Confidentialité</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EPSI LOC - Tous droits réservés</p>
+        </div>
+    </footer>
+    
+    <script src="./js/auth.js"></script>
+    <script src="./js/common.js"></script>
+    <script src="./js/admin.js"></script>
+</body>
+</html>
