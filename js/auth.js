@@ -28,14 +28,29 @@ let currentUser = null;
 /**
  * Vérifie si un utilisateur est connecté au chargement de la page
  */
+/**
+ * auth.js - Gestion de l'authentification des utilisateurs
+ * Ce fichier contient toutes les fonctions liées à la connexion,
+ * l'inscription et la gestion des sessions utilisateur
+ */
+
+/**
+ * Vérifie si un utilisateur est connecté au chargement de la page
+ */
 function checkLoginStatus() {
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-        currentUser = JSON.parse(savedUser);
-        updateUIForLoggedInUser();
-        return true;
-    }
-    return false;
+    fetch("session_status.php")  // Requête au serveur pour vérifier si l'utilisateur est connecté
+        .then(response => response.json())
+        .then(data => {
+            if (data.logged_in) {
+                currentUser = {
+                    id: data.user_id,
+                    fullName: data.user_name,
+                    role: data.user_role
+                };
+                updateUIForLoggedInUser();
+            }
+        })
+        .catch(error => console.log('Erreur de récupération de session:', error));
 }
 
 /**
@@ -66,12 +81,6 @@ function updateUIForLoggedInUser() {
                 adminLink.classList.add('hidden');
             }
         }
-        
-        // Préremplir les formulaires avec les informations de l'utilisateur
-        const contactNameInput = document.getElementById('contact-name');
-        const contactEmailInput = document.getElementById('contact-email');
-        if (contactNameInput) contactNameInput.value = currentUser.fullName;
-        if (contactEmailInput) contactEmailInput.value = currentUser.email;
     } else {
         // Afficher les liens de connexion/inscription
         if (loginLink) loginLink.classList.remove('hidden');
@@ -92,28 +101,33 @@ function updateUIForLoggedInUser() {
  * @returns {boolean} - True si la connexion réussit, false sinon
  */
 function login(email, password) {
-    // Rechercher l'utilisateur dans la base de données
-    const user = users.find(u => u.email === email && u.password === password);
-    
-    if (user) {
-        // Créer une copie de l'utilisateur sans le mot de passe pour la session
-        const userSession = {
-            id: user.id,
-            fullName: user.fullName,
-            email: user.email,
-            role: user.role
-        };
-        
-        // Enregistrer l'utilisateur dans le stockage local
-        currentUser = userSession;
-        localStorage.setItem('currentUser', JSON.stringify(userSession));
-        
-        // Mettre à jour l'interface
-        updateUIForLoggedInUser();
-        return true;
-    }
-    
-    return false;
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('password', password);
+
+    fetch('login.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Récupérer les informations utilisateur
+            currentUser = {
+                fullName: data.user_name,
+                role: data.role
+            };
+            updateUIForLoggedInUser();
+            window.location.href = 'index.html';  // Rediriger après connexion
+        } else {
+            // Afficher le message d'erreur
+            const loginError = document.getElementById('login-error');
+            if (loginError) {
+                loginError.textContent = data.message;
+            }
+        }
+    })
+    .catch(error => console.log('Erreur de connexion:', error));
 }
 
 /**
@@ -124,37 +138,42 @@ function login(email, password) {
  * @returns {boolean} - True si l'inscription réussit, false sinon
  */
 function register(fullName, email, password) {
-    // Vérifier si l'email est déjà utilisé
-    if (users.some(u => u.email === email)) {
-        return false;
-    }
-    
-    // Créer un nouvel utilisateur
-    const newUser = {
-        id: users.length + 1,
-        fullName: fullName,
-        email: email,
-        password: password,
-        role: "user" // Par défaut, tous les nouveaux utilisateurs sont des utilisateurs standard
-    };
-    
-    // Ajouter l'utilisateur à la liste
-    users.push(newUser);
-    
-    // Connecter automatiquement le nouvel utilisateur
-    return login(email, password);
+    // Ajout de l'utilisateur à la liste (local ou serveur, selon ton implémentation)
+    const formData = new FormData();
+    formData.append('full_name', fullName);
+    formData.append('email', email);
+    formData.append('password', password);
+
+    fetch('register.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            login(email, password);  // Connecter l'utilisateur immédiatement après l'inscription
+        } else {
+            // Afficher l'erreur d'inscription
+            const registerError = document.getElementById('register-error');
+            if (registerError) {
+                registerError.textContent = data.message;
+            }
+        }
+    })
+    .catch(error => console.log('Erreur d\'inscription:', error));
 }
 
 /**
  * Déconnecte l'utilisateur actuel
  */
 function logout() {
-    currentUser = null;
-    localStorage.removeItem('currentUser');
-    updateUIForLoggedInUser();
-    
-    // Rediriger vers la page d'accueil
-    window.location.href = 'index.html';
+    fetch('logout.php')
+    .then(() => {
+        currentUser = null;
+        updateUIForLoggedInUser();
+        window.location.href = 'index.html';  // Rediriger vers la page d'accueil après déconnexion
+    })
+    .catch(error => console.log('Erreur de déconnexion:', error));
 }
 
 /**
@@ -194,7 +213,7 @@ function protectPage(adminRequired = false) {
 // Initialiser le statut de connexion au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
     checkLoginStatus();
-    
+
     // Ajouter un gestionnaire d'événement pour le bouton de déconnexion
     const logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
